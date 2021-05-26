@@ -1,1 +1,17 @@
-checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'cc8c72e3-f5bc-472e-870f-c703687f642a', url: 'https://github.com/DaduNicu/test.git']]])
+pipeline {
+   agent any
+   stages {
+    stage('Checkout') {
+      steps {
+        script {
+           checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'cc8c72e3-f5bc-472e-870f-c703687f642a', url: 'https://github.com/DaduNicu/test.git']]])
+
+           sh "ls -lart ./*" 
+           sh "git branch -a"
+           sh "git checkout branchname"
+          }
+       }
+    }
+}
+}
+
