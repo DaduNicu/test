@@ -1,0 +1,13 @@
+pipeline {
+   agent any
+   stages {
+    stage('Checkout') {
+      steps {
+        script {
+           git credentialsId: 'jenkins-user-github', url: 'https://github.com/DaduNicu/test.git'
+           sh "ls -lart ./*" 
+           sh "git branch -a"
+           sh "git checkout branchname"
+          }
+       }
+    
