@@ -1,17 +1,46 @@
 pipeline {
-   agent any
-   stages {
-    stage('Checkout') {
-      steps {
-        script {
-           checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'cc8c72e3-f5bc-472e-870f-c703687f642a', url: 'https://github.com/DaduNicu/test.git']]])
+   environment {
 
-           sh "ls -lart ./*" 
-           sh "git branch -a"
-           sh "git checkout branchname"
-          }
-       }
-    }
+        registry = "nicudadu/devopstest" 
+        registryCredential = 'efc2c2aa-b959-42e3-a7b0-1e8b1720e26e'   
+        dockerImage = '' 
+}
+    agent any 
+    stages { 
+        stage('Cloning our Git') { 
+            steps { 
+
+                git 'https://github.com/DaduNicu/test.git' 
 }
 }
+     stage('Building our image') { 
+            steps { 
 
+                script {
+
+                    dockerImage = docker.build registry + ":Latest" 
+
+
+
+                }
+            }
+        }
+
+ stage('Deploy our image') { 
+            steps { 
+                script { 
+
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push() 
+
+                    }
+                } 
+            }
+
+        }
+        stage('Cleaning up') { 
+            steps { 
+
+                sh "docker rmi $registry:$BUILD_NUMBRER" 
+
+}}}}
