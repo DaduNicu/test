@@ -6,3 +6,8 @@ services:
       - "80:80"
   nginx:
     image: "redis:alpine"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 500M
